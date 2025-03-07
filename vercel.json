@@ -4,23 +4,15 @@
         {
             "src": "discussion_forum/wsgi.py",
             "use": "@vercel/python",
-            "config": { "maxLambdaSize": "50mb" , "runtime" : "python3.9" }
-        },
-        {
-            "src" : "build_files.sh",
-            "use" : "@vercel/static-build",
-            "config" :{
-                "distDir" : "staticfiles_build"
-            }
+            "config": { "maxLambdaSize": "50mb" }
         }
     ],
     "routes": [
         {
-            "src" : "/sttic/(.*)",
-            "dest": "cussion_forum/wsgi.py"
+            "src": "/static/(.*)",
+            "dest": "/staticfiles_build/$1"
         },
         {
-
             "src": "/(.*)",
             "dest": "discussion_forum/wsgi.py"
         }
