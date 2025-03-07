@@ -1,39 +1,119 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Discussion Forum</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #EFF3FF;
-            color: #27272A;
-            margin: 0;
-            padding: 20px;
-        }
-        .container {
-            max-width: 800px;
-            margin: auto;
-        }
-        h1, h2 {
-            color: #BECFFF;
-        }
-        .button {
-            display: inline-block;
-            padding: 10px;
-            background-color: #BECFFF;
-            text-decoration: none;
-            color: #27272A;
-            border-radius: 5px;
-            margin: 10px 0;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Discussion Forum</title>
+  <style>
+    /* Reset & Global Styles */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background-color: #EFF3FF; /* Light background */
+      font-family: Arial, sans-serif;
+      color: #27272A; /* Dark text */
+      padding: 20px;
+      perspective: 1000px; /* Enhances 3D effect */
+    }
+    .container {
+      position: relative;
+      min-height: 100vh;
+    }
+    /* 3D Forum Container (Static) */
+    .forum-container {
+      width: 400px;
+      background: #BECFFF; /* Container background */
+      color: #27272A;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 
+        0 20px 30px rgba(39,39,42,0.4),    /* Outer shadow for depth */
+        inset 0 4px 10px rgba(39,39,42,0.6); /* Inset shadow for inner depth */
+      display: flex;
+      flex-direction: column;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      border: 1px solid #27272A;
+    }
+    /* Forum Header with Dropdown */
+    .forum-header {
+      background-color: #BECFFF;
+      padding: 0.75rem 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #27272A;
+    }
+    .forum-title {
+      font-size: 1rem;
+      font-weight: bold;
+    }
+    .topic-dropdown {
+      background-color: #EFF3FF;
+      border: none;
+      color: #27272A;
+      font-size: 0.8rem;
+      padding: 0.25rem;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .topic-dropdown:focus {
+      outline: 1px solid #27272A;
+    }
+    /* Forum Content Area */
+    .forum-content {
+      background-color: #EFF3FF;
+      padding: 0.75rem;
+      flex: 1;
+      overflow-y: auto;
+    }
+    /* Button Styles */
+    a.button, button {
+      background-color: #27272A;
+      color: #EFF3FF;
+      text-decoration: none;
+      border: none;
+      padding: 0.5rem 0.75rem;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.8rem;
+      margin-bottom: 0.5rem;
+      display: inline-block;
+    }
+    a.button:hover, button:hover {
+      background-color: #27272A;
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <h1><a href="/">Discussion Forum</a></h1>
+  <div class="container">
+    <div class="forum-container">
+      <!-- Header with Topic Dropdown -->
+      <div class="forum-header">
+        <div class="forum-title">Discussion Forum</div>
+        <select class="topic-dropdown" id="topicSelect" onchange="handleTopicChange(this.value)">
+          <option value="">Select Topic</option>
+          {% for t in topics %}
+            <option value="{{ t.id }}" {% if current_topic_id and t.id == current_topic_id %}selected{% endif %}>
+              {{ t.title }}
+            </option>
+          {% endfor %}
+        </select>
+      </div>
+      <!-- Main Content -->
+      <div class="forum-content">
         {% block content %}{% endblock %}
+      </div>
     </div>
+  </div>
+  <script>
+    function handleTopicChange(topicId) {
+      if (topicId) {
+        window.location.href = '/topic/' + topicId + '/';
+      }
+    }
+  </script>
 </body>
 </html>
+
